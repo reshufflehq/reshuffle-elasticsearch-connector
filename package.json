@@ -18,7 +18,8 @@
   "keywords": [
     "Reshuffle",
     "integrations",
-    "workflows"
+    "workflows",
+    "Elasticsearch"
   ],
   "author": "Reshuffle",
   "license": "MIT",
