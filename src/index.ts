@@ -1,61 +1,27 @@
-import { Reshuffle, BaseConnector, EventConfiguration } from 'reshuffle-base-connector'
+import { Reshuffle, BaseConnector } from 'reshuffle-base-connector'
+import { Client, ClientOptions } from '@elastic/elasticsearch'
 
-export interface _CONNECTOR_NAME_ConnectorConfigOptions {
-  var1: string
-  // ...
-}
+export default class ElasticsearchConnector extends BaseConnector<ClientOptions, null> {
+  private readonly client: Client
 
-export interface _CONNECTOR_NAME_ConnectorEventOptions {
-  option1?: string
-  // ...
-}
-
-export default class _CONNECTOR_NAME_Connector extends BaseConnector<
-  _CONNECTOR_NAME_ConnectorConfigOptions,
-  _CONNECTOR_NAME_ConnectorEventOptions
-> {
-  // Your class variables
-  var1: string
-
-  constructor(app: Reshuffle, options?: _CONNECTOR_NAME_ConnectorConfigOptions, id?: string) {
+  constructor(app: Reshuffle, options?: ClientOptions, id?: string) {
     super(app, options, id)
-    this.var1 = options?.var1 || 'initial value'
-    // ...
+    this.client = new Client(options)
   }
 
   onStart(): void {
-    // If you need to do something specific on start, otherwise remove this function
+    this.client.ping((error) => {
+      if (error) {
+        console.error('Reshuffle Elasticsearch Connector - connection failed', this.configOptions)
+      } else {
+        console.log('Reshuffle Elasticsearch Connector - Elasticsearch is connected')
+      }
+    })
   }
 
-  onStop(): void {
-    // If you need to do something specific on stop, otherwise remove this function
-  }
-
-  // Your events
-  on(
-    options: _CONNECTOR_NAME_ConnectorEventOptions,
-    handler: any,
-    eventId: string,
-  ): EventConfiguration {
-    if (!eventId) {
-      eventId = `_CONNECTOR_NAME_/${options.option1}/${this.id}`
-    }
-    const event = new EventConfiguration(eventId, this, options)
-    this.eventConfigurations[event.id] = event
-
-    this.app.when(event, handler)
-
-    return event
-  }
-
-  // Your actions
-  action1(bar: string): void {
-    // Your implementation here
-  }
-
-  action2(foo: string): void {
-    // Your implementation here
+  sdk(): Client {
+    return this.client
   }
 }
 
-export { _CONNECTOR_NAME_Connector }
+export { ElasticsearchConnector }
