@@ -1,52 +1,130 @@
-## BEGIN - TO DELETE TILL END
+## reshuffle-elasticsearch-connector
 
-THIS IS A TEMPLATE REPO FOR NEW RESHUFFLE CONNECTORS
-1. Create a new connector repo from this template using this link https://github.com/reshufflehq/reshuffle-template-connector/generate
-2. Clone the repo locally
-3. Rename all occurrences of _CONNECTOR_NAME_
-4. `npm install`
-5. `npm run build:watch`
-6. Implement your events/actions in `src/index.ts`
-7. `npm run lint`
-8. Push your code
-9. Go to https://app.circleci.com/projects/project-dashboard/github/reshufflehq/
-    a. You should see your new connector repo
-    b. click on `Set Up Project` for the repo
-    c. click on `Use Existing Config`
-    d. click on `Start Building`
+[Code](https://github.com/reshufflehq/reshuffle-elasticsearch-connector) |  [npm](https://www.npmjs.com/package/reshuffle-elasticsearch-connector) | [Code sample](https://github.com/reshufflehq/reshuffle/tree/master/examples/elasticsearch)
 
-10. If circle CI checks are all green, you are all set!
+`npm install reshuffle-elasticsearch-connector`
 
-// Keep documentation template below
+This connector uses [Elasticsearch Node JS Client](https://www.npmjs.com/package/@elastic/elasticsearch) package.
 
-## END
 
-# reshuffle-_CONNECTOR_NAME_-connector
+### Reshuffle Elasticsearch Connector
 
-### Reshuffle _CONNECTOR_NAME_ Connector
+This package contains a Reshuffle connector for connecting to [Elasticsearch](https://www.elastic.co/elasticsearch/).
 
-This connector provides <description>.
+The following example add a new entry to an existing index:
+```js
+const { Reshuffle } = require('reshuffle')
+const { ElasticsearchConnector } = require('reshuffle-elasticsearch-connector')
 
-#### Configuration Options:
-```typescript
-interface _CONNECTOR_NAME_ConnectorConfigOptions {
-  foo: string // foo description
-  bar?: number // bar description
+const elasticsearchOptions = {
+  cloud: {
+    id:
+      '<name>:<id>',
+  },
+  auth: {
+    username: '<username>',
+    password: '<password>',
+  },
 }
+
+const app = new Reshuffle()
+const connector = new Elasticsearch(app, elasticsearchOptions)
+
+app.start()
+
+connector.sdk().index({
+  index: 'game-of-thrones',
+  body: {
+    character: 'Daenerys Targaryen',
+    quote: 'I am the blood of the dragon.'
+  }
+})
 ```
 
-#### Connector events
+### Table of Contents
 
-##### event1 description
-The connector fires this event when ...
+[Setup Cloud elasticsearch](#setup)
 
-##### event2 description
-The connector fires this event when ...
+[Configuration Options](#configuration)
+
+#### Connector Events
+
+N/A
+
+#### Connector Actions
+
+[SDK](#sdk) - Retrieve a Node JS Elasticsearch client
+
+[Examples using the SDK](#sdk)
+
+#### <a name="setup"></a>Setup Cloud Elasticsearch
+Setup Elastic cloud:
+
+1. Go to https://cloud.elastic.co/home
+2. Click `Create deployment`
+3. Provide a name and create
+4. Copy the username/password   
+4. Click on your deployment in the deployment list
+5. copy the cloud ID which is <deployment-name>:<key>
+6. See [Configuration Options](#configuration) below on how to connect to this Elasticsearch cloud instance.
+
+#### <a name="configuration"></a>Configuration Options
+
+The Elasticsearch connector takes the same options as the Node JS Elasticsearch client.
+See [Node JS Elasticsearch Client options](https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/client-configuration.html)
+
+As an example, for connecting to elasticsearch cloud, provide options as below:
+
+```typescript
+import ElasticsearchConnector from "./index";
+
+const connector = new ElasticsearchConnector(app, {
+  cloud: {
+    id:
+      '<deployment-name>:<key>', // Cloud ID (see Setup Cloud Elasticsearch above for obtaining this id)
+  },
+  auth: {
+    username: '<username>',
+    password: '<password>',
+  },
+})
+```
 
 #### Connector actions
 
-##### action1
-The connector provides action1 which ...
+All actions are provided via the sdk.
+// See full list of actions documentations in [Node JS Elasticsearch Client API reference](https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#api-reference)
 
-##### action2
-The connector provides action2 which ...
+##### <a name="sdk"></a>SDK
+
+Return a Node Elasticsearch Client
+
+```typescript
+const sdk = await connector.sdk()
+```
+
+##### <a name="examples"></a>Examples using the SDK
+
+- Search entries
+```typescript
+const entries = await connector.sdk().search({
+  index: 'my-index',
+  from: 20,
+  size: 10,
+  body: { foo: 'bar' }
+}, {
+  ignore: [404],
+  maxRetries: 3
+})
+```
+
+- Add entry
+```typescript
+await connector.sdk().index({
+  index: 'game-of-thrones',
+  body: {
+    character: 'Ned Stark',
+    quote: 'Winter is coming.'
+  }
+})
+```
