@@ -11,7 +11,7 @@ This connector uses [Elasticsearch Node JS Client](https://www.npmjs.com/package
 
 This package contains a Reshuffle connector for connecting to [Elasticsearch](https://www.elastic.co/elasticsearch/).
 
-The following example add a new entry to an existing index:
+The following example adds a new entry to an existing index:
 ```js
 const { Reshuffle } = require('reshuffle')
 const { ElasticsearchConnector } = require('reshuffle-elasticsearch-connector')
@@ -55,7 +55,7 @@ N/A
 
 [SDK](#sdk) - Retrieve a Node JS Elasticsearch client
 
-[Examples using the SDK](#sdk)
+[Examples using the SDK](#examples)
 
 #### <a name="setup"></a>Setup Cloud Elasticsearch
 Setup Elastic cloud:
@@ -66,7 +66,7 @@ Setup Elastic cloud:
 4. Copy the username/password   
 4. Click on your deployment in the deployment list
 5. copy the cloud ID which is <deployment-name>:<key>
-6. See [Configuration Options](#configuration) below on how to connect to this Elasticsearch cloud instance.
+6. See [Configuration Options](#configuration) below for how to connect to this Elasticsearch cloud instance.
 
 #### <a name="configuration"></a>Configuration Options
 
@@ -76,8 +76,6 @@ See [Node JS Elasticsearch Client options](https://www.elastic.co/guide/en/elast
 As an example, for connecting to elasticsearch cloud, provide options as below:
 
 ```typescript
-import ElasticsearchConnector from "./index";
-
 const connector = new ElasticsearchConnector(app, {
   cloud: {
     id:
@@ -93,7 +91,7 @@ const connector = new ElasticsearchConnector(app, {
 #### Connector actions
 
 All actions are provided via the sdk.
-// See full list of actions documentations in [Node JS Elasticsearch Client API reference](https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#api-reference)
+// See full list of actions in [Node JS Elasticsearch Client API reference](https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#api-reference)
 
 ##### <a name="sdk"></a>SDK
 
