@@ -9,7 +9,7 @@ This connector uses [Elasticsearch Node JS Client](https://www.npmjs.com/package
 
 ### Reshuffle Elasticsearch Connector
 
-This package contains a Reshuffle connector for connecting to [Elasticsearch](https://www.elastic.co/elasticsearch/).
+This package contains a [Reshuffle](https://github.com/reshufflehq/reshuffle) connector for connecting to [Elasticsearch](https://www.elastic.co/elasticsearch/).
 
 The following example adds a new entry to an existing index:
 ```js
