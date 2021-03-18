@@ -28,7 +28,7 @@ const elasticsearchOptions = {
 }
 
 const app = new Reshuffle()
-const connector = new Elasticsearch(app, elasticsearchOptions)
+const connector = new ElasticsearchConnector(app, elasticsearchOptions)
 
 app.start()
 
